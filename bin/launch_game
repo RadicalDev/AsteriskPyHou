@@ -8,22 +8,25 @@ from ami import AMI
 from functions import sms
 from database import Sqlite3Database
 
+DB = Sqlite3Database("../etc/users.db")
 
 def game1():
     main_line = '8322611494'
-    db = Sqlite3Database("../etc/users.db")
-    users = db.dquery("users", fetchall=True)
+    users = DB.dquery("users", fetchall=True)
 
     ami = AMI()
     for user in users:
         ami.create_call(user['phonenumber'], main_line, main_line, 'game-one', user['phonenumber'])
 
+def game1_result():
+    for entry in DB.dquery("entry", where="game=1", fetchall=True, order_by="result ASC"):
+        print entry
+
+
 
 def game2():
     number = "8322611494"
-
-    db = Sqlite3Database("../etc/users.db")
-    users = db.dquery("users", fetchall=True)
+    users = DB.dquery("users", fetchall=True)
 
     for user in users:
         code = open("/etc/secret_code", 'r').read().strip()
@@ -31,27 +34,44 @@ def game2():
         print user['phonenumber'], ": ", msg
         sms(user['phonenumber'], msg)
 
+def game2_result():
+    for entry in DB.dquery("entry", where="game=2", fetchall=True, order_by="result ASC"):
+        print entry
 
 def game3():
     main_line = '2818097414'
-    db = Sqlite3Database("../etc/users.db")
-    users = db.dquery("users", fetchall=True)
+    users = DB.dquery("users", fetchall=True)
 
     ami = AMI()
     for user in users:
         ami.create_call(user['phonenumber'], main_line,
                         main_line, 'game-three', user['phonenumber'])
 
+def game3_result():
+    for entry in DB.dquery("entry", where="game=1", fetchall=True, order_by="result ASC"):
+        print entry
 
-games = {'1':game1, '2':game2, '3':game3}
+games = {'1':(game1, game1_result),
+         '2':(game2, game2_result),
+         '3':(game3, game3_result)
+}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print "launch_game <game_number>"
         sys.exit(1)
 
+    get_result = False
+
     game_number = sys.argv[1]
+    if len(sys.argv) > 2:
+        get_result = True
+
     if game_number in games:
-        games[game_number]()
-        print "Started game number ", game_number
+        if not get_result:
+            games[game_number][0]()
+            print "Started game number ", game_number
+        else:
+            games[game_number][1]()
+
 

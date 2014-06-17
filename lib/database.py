@@ -50,10 +50,10 @@ class Sqlite3Database(object):
         self.db.commit()
         return self.cur.lastrowid
 
-    def dquery(self, table, keys="*", where="", fetchall=False, as_dict=True):
-        return self.select(table, keys, where, fetchall, as_dict)
+    def dquery(self, table, keys="*", where="", fetchall=False, as_dict=True, order_by=""):
+        return self.select(table, keys, where, fetchall, as_dict, order_by)
 
-    def select(self, table, keys="*", where="", fetchall = False, as_dict = False):
+    def select(self, table, keys="*", where="", fetchall = False, as_dict = False, order_by=""):
         if keys == "*":
             keys = ", ".join([x[1] for x in self.execute("PRAGMA table_info({0})".format(table)).fetchall()])
         else:
@@ -62,6 +62,9 @@ class Sqlite3Database(object):
 
         if where:
             qstr += " WHERE {0}".format(where)
+
+        if order_by:
+            qstr += " ORDER BY {0}".format(order_by)
 
         try:
             res = self.execute(qstr)
