@@ -1,0 +1,125 @@
+#!/usr/bin/python
+__author__ = 'jfindley'
+"""Secure WSGI server example based on gevent.pywsgi"""
+
+import os
+import sys
+sys.path.append("../lib")
+
+from gevent import pywsgi
+from phonenumbers import parse, is_valid_number
+from database import Sqlite3Database
+from functions import sms
+
+DB = Sqlite3Database("../etc/users.db")
+
+
+def numberOK(number):
+    if is_valid_number(parse(number, 'US')):
+        return True
+    return False
+
+
+def generatePeer(parms):
+    template = """[{0}]
+type=peer
+host=dynamic
+secret={1}
+disallow=all
+allow=ulaw
+nat=no
+canreinvite=no
+qualify=no
+context=default
+dtmfmode=rfc2833
+insecure=invite,port
+sendrpid=yes
+callerid={0}
+
+"""
+    return template.format(parms['extension'], parms['secret'])
+
+
+def writePeer(peer):
+    with open("/etc/asterisk/sip.conf", 'a') as f:
+        f.write(peer)
+        f.close()
+
+
+def getParms(env):
+    return dict([x.split("=") for x in env['QUERY_STRING'].split("&")])
+
+
+def handler(env, start_response):
+    start_response('200 OK', [('Content-Type', 'text/html')])
+    for key, value in env.iteritems():
+        print key, value
+
+    if env['PATH_INFO'] == '/getusers':
+        return [str(DB.dquery("users", ['username', 'phonenumber', 'winner', 'extension'], fetchall=True))]
+
+    elif env['PATH_INFO'] == '/register':
+        parms = getParms(env)
+
+        if not ('username' in parms and 'phonenumber' in parms):
+            return ["Invalid parameters in request: Need name and valid number"]
+
+        if not numberOK(parms['phonenumber']):
+            return ["Invalid number in request"]
+
+        parms['extension'] = parms['phonenumber'][-4:]
+        parms['secret'] = parms['phonenumber']
+
+        try:
+            DB.insert("users", parms)
+            writePeer(
+                generatePeer(
+                    parms
+                )
+            )
+            os.system('/usr/sbin/asterisk -rx "sip reload"')
+        except Exception, e:
+            return ["User already exists!"]
+
+        msg = "You're good.\n"
+        msg += "un: {0}\n".format(parms['extension'])
+        msg += "pw: {0}\n".format(parms['secret'])
+        msg += "gw: 54.186.252.119"
+        sms(parms['phonenumber'], msg)
+        return ["OK"]
+
+    elif env['PATH_INFO'] == '/deregister':
+        parms = getParms(env)
+        if not 'phonenumber' in parms:
+            return ["Invalid parameters in request: Need valid number"]
+
+        if not numberOK(parms['phonenumber']):
+            return ["Invalid number in request"]
+
+        DB.delete("users", where="phonenumber='{0}'".format(parms['phonenumber']))
+        return ["OK"]
+
+    elif env['PATH_INFO'] == "/makewinner":
+        parms = getParms(env)
+        print parms
+        if not "phonenumber" in parms:
+            return ['Request must contain phonenumber']
+
+        DB.update("users", "winner", "True", where="phonenumber='{0}'".format(parms['phonenumber']))
+        return ['OK']
+
+    elif env['PATH_INFO'] == '/reset':
+        DB.update("users", "winner", "False")
+        return ['OK']
+
+    elif env['PATH_INFO'] == '/getwinners':
+        return [str(DB.dquery('users', ['username', 'phonenumber', 'winner', 'extension'], where="winner='True'", fetchall=True))]
+
+    else:
+        return "NOT FOUND"
+
+if __name__ == "__main__":
+    server = pywsgi.WSGIServer(('0.0.0.0', 80), handler)
+    # to start the server asynchronously, call server.start()
+    # we use blocking serve_forever() here because we have no other jobs
+    server.serve_forever()

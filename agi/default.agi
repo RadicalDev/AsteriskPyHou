@@ -1,0 +1,21 @@
+#!/usr/bin/python
+from asterisk import agi as AGI
+from syslog import syslog as log, LOG_INFO
+from phonenumbers import parse, is_valid_number
+
+def numberOK(number):
+    if is_valid_number(parse(number, 'US')):
+        return True
+    return False
+
+if __name__ == "__main__":
+    agi = AGI.AGI()
+    for key, value in agi.env.iteritems():
+        log(LOG_INFO, "default.agi: {0}: {1}".format(key, value))
+
+    dest = agi.env['agi_extension']
+    if numberOK(dest):
+        tech = "SIP/1{0}@outbound".format(dest)
+        agi.appexec("DIAL", tech)
+    else:
+        agi.appexec("DIAL", "SIP/{0}".format(dest))
