@@ -24,7 +24,7 @@ except:
 
 
 def genURL(apikey, duration, reference, fmt, callback):
-    url = MYCAPTION_ASR_API
+    url = MYCAPTION_PREMIUM_API
     url = url.format(apikey, duration, reference, fmt, callback)
     return url
 
