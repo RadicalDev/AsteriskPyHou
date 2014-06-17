@@ -12,6 +12,9 @@ from database import Sqlite3Database
 from functions import sms
 from syslog import syslog as log, LOG_INFO
 
+if os.path.exists("../etc/users.db"):
+    os.remove("../etc/users.db")
+
 DB = Sqlite3Database("../etc/users.db")
 
 
@@ -137,13 +140,7 @@ def handler(env, start_response):
         return "NOT FOUND"
 
 if __name__ == "__main__":
-    try:
-        server = pywsgi.WSGIServer(('0.0.0.0', 80), handler)
-        # to start the server asynchronously, call server.start()
-        # we use blocking serve_forever() here because we have no other jobs
-        server.serve_forever()
-    except Exception, e:
-        log(LOG_INFO, "webserver: Shutting down!")
-        if os.path.exists("../etc/users.db"):
-            log(LOG_INFO, "webserver: Deleting database")
-            os.remove("../etc/users.db")
+    server = pywsgi.WSGIServer(('0.0.0.0', 80), handler)
+    # to start the server asynchronously, call server.start()
+    # we use blocking serve_forever() here because we have no other jobs
+    server.serve_forever()
