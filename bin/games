@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import sys
-sys.path.append("../lib")
+sys.path.append("/usr/local/AsteriskPyHou/lib")
 
 from database import Sqlite3Database
 from ami import AMI
@@ -9,7 +9,7 @@ from functions import sms
 from database import Sqlite3Database
 import argparse
 
-DB = Sqlite3Database("../etc/users.db")
+DB = Sqlite3Database("/usr/local/AsteriskPyHou/etc/users.db")
 GAME_RESULTS=None
 
 def game1():
