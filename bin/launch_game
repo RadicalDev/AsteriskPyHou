@@ -18,8 +18,8 @@ def game1():
     for user in users:
         ami.create_call(user['phonenumber'], main_line, main_line, 'game-one', user['phonenumber'])
 
-def game1_result():
-    for entry in DB.dquery("entry", where="game=1", fetchall=True, order_by="result ASC"):
+def game1_result(winner=False):
+    for entry in DB.dquery("entry", where="game=1", fetchall=not winner, order_by="result ASC"):
         print entry
 
 
@@ -34,8 +34,8 @@ def game2():
         print user['phonenumber'], ": ", msg
         sms(user['phonenumber'], msg)
 
-def game2_result():
-    for entry in DB.dquery("entry", where="game=2", fetchall=True, order_by="result ASC"):
+def game2_result(winner=False):
+    for entry in DB.dquery("entry", where="game=2", fetchall=not winner, order_by="result ASC"):
         print entry
 
 def game3():
@@ -47,8 +47,8 @@ def game3():
         ami.create_call(user['phonenumber'], main_line,
                         main_line, 'game-three', user['phonenumber'])
 
-def game3_result():
-    for entry in DB.dquery("entry", where="game=1", fetchall=True, order_by="result ASC"):
+def game3_result(winner=False):
+    for entry in DB.dquery("entry", where="game=1", fetchall=not winner, order_by="result ASC"):
         print entry
 
 games = {'1':(game1, game1_result),
@@ -62,16 +62,22 @@ if __name__ == "__main__":
         sys.exit(1)
 
     get_result = False
+    get_winner = False
 
     game_number = sys.argv[1]
     if len(sys.argv) > 2:
-        get_result = True
+        if sys.argv[2] == 'results':
+            get_result = True
+        elif sys.argv[2] == 'winner':
+            get_winner = True
 
     if game_number in games:
-        if not get_result:
+        if not get_result and not get_winner:
             games[game_number][0]()
             print "Started game number ", game_number
-        else:
+        elif get_result:
             games[game_number][1]()
+        elif get_winner:
+            games[game_number][1](winner=True)
 
 
