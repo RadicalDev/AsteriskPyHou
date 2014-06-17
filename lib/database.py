@@ -19,7 +19,8 @@ class Sqlite3Database(object):
 
     def delete(self, table, where):
         qstr = "DELETE FROM {0} WHERE {1}".format(table, where)
-        return self.execute(qstr)
+        res = self.execute(qstr)
+        self.db.commit()
 
     def update_d(self, table, d, where=""):
         set_str = ", ".join(["{0}='{1}'".format(x, y) for x, y in d.iteritems()])
