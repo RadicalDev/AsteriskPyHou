@@ -122,7 +122,12 @@ def handler(env, start_response):
 
         parms = getParms(env)
 
-        log(LOG_INFO, "server: parms: {0}".format(parms))
+        entry = {'game':3, 'phonenumber':parms['reference'], 'result':parms['transcription'].lower()}
+        try:
+            DB.insert("entry", entry)
+        except Exception, e:
+            log(LOG_INFO, "game2.agi: {0}'s entry was omitted because: {1}".format(parms['reference'], e))
+
         return ['OK']
 
     else:

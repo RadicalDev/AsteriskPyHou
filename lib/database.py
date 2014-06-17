@@ -108,6 +108,14 @@ class Sqlite3Database(object):
                       "extension VARCHAR, "
                       "secret VARCHAR"
                       ")"
+
+                      "CREATE TABLE entry("
+                      "rowID INTEGER PRIMARY KEY AUTOINCREMENT, "
+                      "game INTEGER, "
+                      "phonenumber VARCHAR, "
+                      "result VARCHAR"
+                      "UNIQUE(game, phonenumber) ON CONFLICT ABORT"
+                      ")"
             )
 
             try:

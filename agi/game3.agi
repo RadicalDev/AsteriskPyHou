@@ -17,7 +17,7 @@ if __name__ == "__main__":
     user = agi.env['agi_accountcode']
 
     for key, value in agi.env.iteritems():
-        log(LOG_INFO, "game1.agi: {0}: {1}".format(key, value))
+        log(LOG_INFO, "game3.agi: {0}: {1}".format(key, value))
 
     start = time.time()
     try:
@@ -26,8 +26,7 @@ if __name__ == "__main__":
         uid = uuid4()
         audio_path = "/tmp/{0}.wav".format(uid)
         agi.appexec("RECORD", "{0},10,30,k".format(audio_path))
-        #requestCaption(uid, user, audio_path)
+        requestCaption(uid, user, audio_path)
     except:
-        diff = time.time()-start
-        log(LOG_INFO, "game1.agi: {0} hung up in {1} seconds!".format(user, diff))
-    log(LOG_INFO, "Sent request for {0}".format(user))
+        log(LOG_INFO, "game3.agi: {0} hung up!".format(user))
+    log(LOG_INFO, "game3.agi: Sent request for {0}".format(user))

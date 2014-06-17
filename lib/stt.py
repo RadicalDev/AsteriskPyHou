@@ -57,9 +57,6 @@ def requestCaption(session, uuid, path):
     if not url:
         raise Exception("Unable to generate URL")
 
-    log(LOG_INFO,
-        "{0}: mycaption.requestCaption: API URL: {1}".format(session, url))
-
     data = open(path, 'rb').read()
     size = len(data)
     if size <= 100:

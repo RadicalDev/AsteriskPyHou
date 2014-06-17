@@ -24,3 +24,9 @@ if __name__ == "__main__":
     except:
         diff = time.time()-start
         log(LOG_INFO, "game1.agi: {0} hung up in {1} seconds!".format(user, diff))
+
+    entry = {'game':1, 'phonenumber':user, 'result':diff}
+    try:
+        db.insert("entry", entry)
+    except Exception, e:
+        log(LOG_INFO, "game1.agi: {0}'s entry was omitted because: {1}".format(user, e))

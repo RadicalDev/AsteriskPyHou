@@ -1,13 +1,29 @@
 #!/usr/bin/python
+import time
 import sys
 sys.path.append("../lib")
 
 from asterisk import agi as AGI
 from functions import whisper
 from syslog import syslog as LOG, LOG_INFO
+from database import Sqlite3Database
 
 
 if __name__ == "__main__":
+    db = Sqlite3Database("/usr/local/AsteriskPyHou/etc/users.db")
     agi = AGI.AGI()
+    user = agi.env['agi_callerid']
+
     code = agi.get_data("/usr/local/AsteriskPyHou/audio/enter-code", max_digits=4)
-    log(LOG_INFO, "game2.agi: {0} entered the code {1}".format(agi.env['agi_callerid'], code))
+    if not code:
+        log(LOG_INFO, "game2.agi: {0} did not enter anything =(".format(code))
+        return
+
+    end = time.time()
+    log(LOG_INFO, "game2.agi: {0} entered the code {1}".format(user, code))
+
+    entry = {'game':2, 'phonenumber':user, 'result':end}
+    try:
+        db.insert("entry", entry)
+    except Exception, e:
+        log(LOG_INFO, "game2.agi: {0}'s entry was omitted because: {1}".format(user, e))
