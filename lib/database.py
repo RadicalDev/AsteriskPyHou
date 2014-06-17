@@ -99,7 +99,8 @@ class Sqlite3Database(object):
             db = sql.connect(path)
             cur = db.cursor()
 
-            create = (
+            create = [
+                (
                       "CREATE TABLE users("
                       "rowID INTEGER PRIMARY KEY AUTOINCREMENT, "
                       "username VARCHAR, "
@@ -108,9 +109,9 @@ class Sqlite3Database(object):
                       "extension VARCHAR, "
                       "secret VARCHAR"
                       ")"
+                ),
 
-                      "\n"
-
+                (
                       "CREATE TABLE entry("
                       "rowID INTEGER PRIMARY KEY AUTOINCREMENT, "
                       "game INTEGER, "
@@ -118,10 +119,12 @@ class Sqlite3Database(object):
                       "result VARCHAR"
                       "UNIQUE(game, phonenumber) ON CONFLICT ABORT"
                       ")"
-            )
+                )
+            ]
 
             try:
-                cur.execute(create)
+                for stmt in create:
+                    cur.execute(stmt)
                 db.commit()
             except Exception, e:
                 log(LOG_INFO, "{0}: database.Sqlite3Database: Failed to create tables: {1}".format(self.session, e))
