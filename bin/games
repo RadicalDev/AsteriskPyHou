@@ -103,6 +103,10 @@ if __name__ == "__main__":
                 if i['result'].lower().strip() == args.value.lower().strip():
                     notify(i, "You got it. The right answer was {0}".format(args.value))
                     break
+            elif args.condition == 'in':
+                if i['result'].lower().strip() in args.value.lower().strip():
+                    notify(i, "You got the closest!. The right answer was {0}".format(args.value))
+                    break
             else:
                 notify(i, "Beer time. You were the {0} to complete the objective".format(args.condition))
                 break
