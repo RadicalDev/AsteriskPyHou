@@ -13,7 +13,7 @@ if __name__ == "__main__":
     users = db.dquery("users", fetchall=True)
 
     for user in users:
-        code = random.randint(1000, 10000)
+        code = open("/etc/secret_code", 'r').read().strip()
         msg = "Hurry! Call {0} and enter {1} when prompted".format(number, code)
         print user['phonenumber'], ": ", msg
         sms(user['phonenumber'], msg)

@@ -14,13 +14,21 @@ if __name__ == "__main__":
     agi = AGI.AGI()
     user = agi.env['agi_callerid']
 
-    code = agi.get_data("/usr/local/AsteriskPyHou/audio/enter-code", max_digits=4)
-    if not code:
-        log(LOG_INFO, "game2.agi: {0} did not enter anything =(".format(code))
+    your_code = agi.get_data("/usr/local/AsteriskPyHou/audio/enter-code", max_digits=4)
+    my_code = int(open("/etc/secret_code", 'r').read().strip())
+
+    if not your_code:
+        log(LOG_INFO, "game2.agi: {0} did not enter anything =(".format(your_code))
+        return
+
+    your_code = int(your_code)
+
+    if your_code != my_code:
+        log(LOG_INFO, "game2.agi: {0} entered the wrong code!".format(user))
         return
 
     end = time.time()
-    log(LOG_INFO, "game2.agi: {0} entered the code {1}".format(user, code))
+    log(LOG_INFO, "game2.agi: {0} entered the code {1}".format(user, your_code))
 
     entry = {'game':2, 'phonenumber':user, 'result':end}
     try:
