@@ -10,28 +10,31 @@ from database import Sqlite3Database
 
 
 if __name__ == "__main__":
-    db = Sqlite3Database("/usr/local/AsteriskPyHou/etc/users.db")
-    agi = AGI.AGI()
-    user = agi.env['agi_callerid']
-
-    your_code = agi.get_data("/usr/local/AsteriskPyHou/audio/enter-code", max_digits=4)
-    my_code = int(open("/etc/secret_code", 'r').read().strip())
-
-    if not your_code:
-        log(LOG_INFO, "game2.agi: {0} did not enter anything =(".format(your_code))
-        return
-
-    your_code = int(your_code)
-
-    if your_code != my_code:
-        log(LOG_INFO, "game2.agi: {0} entered the wrong code!".format(user))
-        return
-
-    end = time.time()
-    log(LOG_INFO, "game2.agi: {0} entered the code {1}".format(user, your_code))
-
-    entry = {'game':2, 'phonenumber':user, 'result':end}
     try:
-        db.insert("entry", entry)
+        db = Sqlite3Database("/usr/local/AsteriskPyHou/etc/users.db")
+        agi = AGI.AGI()
+        user = agi.env['agi_callerid']
+
+        your_code = agi.get_data("/usr/local/AsteriskPyHou/audio/enter-code", max_digits=4)
+        my_code = int(open("/etc/secret_code", 'r').read().strip())
+
+        if not your_code:
+            log(LOG_INFO, "game2.agi: {0} did not enter anything =(".format(your_code))
+            return
+
+        your_code = int(your_code)
+
+        if your_code != my_code:
+            log(LOG_INFO, "game2.agi: {0} entered the wrong code!".format(user))
+            return
+
+        end = time.time()
+        log(LOG_INFO, "game2.agi: {0} entered the code {1}".format(user, your_code))
+
+        entry = {'game':2, 'phonenumber':user, 'result':end}
+        try:
+            db.insert("entry", entry)
+        except Exception, e:
+            log(LOG_INFO, "game2.agi: {0}'s entry was omitted because: {1}".format(user, e))
     except Exception, e:
-        log(LOG_INFO, "game2.agi: {0}'s entry was omitted because: {1}".format(user, e))
+        log(LOG_INFO, "WTF: {0}".format(e))
