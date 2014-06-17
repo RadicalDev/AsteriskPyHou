@@ -34,7 +34,7 @@ def getFormat(path):
     return fmt.lstrip(".")
 
 
-def requestCaption(session, uuid, path, method="ASR"):
+def requestCaption(session, uuid, path, method="PREMIUM"):
     reference = uuid
     callback = CALLBACK
     apikey = KEY
