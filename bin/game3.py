@@ -5,7 +5,7 @@ from database import Sqlite3Database
 from ami import AMI
 
 if __name__ == "__main__":
-    main_line = '8322611494'
+    main_line = '2818097414'
     db = Sqlite3Database("../etc/users.db")
     users = db.dquery("users", fetchall=True)
 
