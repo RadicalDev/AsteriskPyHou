@@ -5,6 +5,7 @@ __author__ = 'jfindley'
 import os
 import sys
 import json
+import urllib
 
 sys.path.append("/usr/local/AsteriskPyHou/lib")
 
@@ -77,7 +78,10 @@ def handler(env, start_response):
     for key, value in env.iteritems():
         log(LOG_INFO, "server: {0}: {1}".format(key, value))
 
-    if env['PATH_INFO'] == '/getusers':
+    if env['PATH_INFO'] == '/':
+        return urllib.urlopen("http://127.0.0.1:8080")
+
+    elif env['PATH_INFO'] == '/getusers':
         return [json.dumps(DB.dquery("users", ['username', 'phonenumber', 'extension'], fetchall=True))]
 
     elif env['PATH_INFO'] == '/register':

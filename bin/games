@@ -7,6 +7,7 @@ from database import Sqlite3Database
 from ami import AMI
 from functions import sms
 from database import Sqlite3Database
+from urllib import urlopen
 import argparse
 
 DB = Sqlite3Database("/usr/local/AsteriskPyHou/etc/users.db")
@@ -58,6 +59,7 @@ def get_results(game, order_by):
 def notify(i, what):
     print "Notifying {0}: {1} -> {2}".format(i['phonenumber'], i['game'], i['result'])
     sms(i['phonenumber'], what)
+    urlopen("http://127.0.0.1:8080/set_winner/{0}".format(i['phonenumber']))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
