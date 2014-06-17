@@ -116,7 +116,7 @@ class Sqlite3Database(object):
                       "rowID INTEGER PRIMARY KEY AUTOINCREMENT, "
                       "game INTEGER, "
                       "phonenumber VARCHAR, "
-                      "result VARCHAR"
+                      "result VARCHAR, "
                       "UNIQUE(game, phonenumber) ON CONFLICT ABORT"
                       ")"
                 )
@@ -133,3 +133,4 @@ class Sqlite3Database(object):
             db = sql.connect(path)
             cur = db.cursor()
         return db, cur
+
