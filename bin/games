@@ -18,6 +18,7 @@ def game1():
     for user in users:
         ami.create_call(user['phonenumber'], main_line, main_line, 'game-one', user['phonenumber'])
 
+
 def game1_result(winner=False):
     for entry in DB.dquery("entry", where="game=1", fetchall=not winner, order_by="result ASC"):
         print entry
@@ -34,9 +35,11 @@ def game2():
         print user['phonenumber'], ": ", msg
         sms(user['phonenumber'], msg)
 
+
 def game2_result(winner=False):
     for entry in DB.dquery("entry", where="game=2", fetchall=not winner, order_by="result ASC"):
         print entry
+
 
 def game3():
     main_line = '2818097414'
@@ -47,6 +50,7 @@ def game3():
         ami.create_call(user['phonenumber'], main_line,
                         main_line, 'game-three', user['phonenumber'])
 
+
 def game3_result(winner=False):
     for entry in DB.dquery("entry", where="game=1", fetchall=not winner, order_by="result ASC"):
         print entry
@@ -56,9 +60,10 @@ games = {'1':(game1, game1_result),
          '3':(game3, game3_result)
 }
 
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print "launch_game <game_number>"
+        print "games <game_number>"
         sys.exit(1)
 
     get_result = False
