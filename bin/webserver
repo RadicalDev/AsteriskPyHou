@@ -137,7 +137,12 @@ def handler(env, start_response):
         return "NOT FOUND"
 
 if __name__ == "__main__":
-    server = pywsgi.WSGIServer(('0.0.0.0', 80), handler)
-    # to start the server asynchronously, call server.start()
-    # we use blocking serve_forever() here because we have no other jobs
-    server.serve_forever()
+    try:
+        server = pywsgi.WSGIServer(('0.0.0.0', 80), handler)
+        # to start the server asynchronously, call server.start()
+        # we use blocking serve_forever() here because we have no other jobs
+        server.serve_forever()
+    except Exception, e:
+        log(LOG_INFO, "webserver: Shutting down!")
+        if os.path.exists("../etc/users.db"):
+            os.remove("../etc/users.db")
