@@ -3,7 +3,10 @@ __author__ = 'jfindley'
 """Secure WSGI server example based on gevent.pywsgi"""
 
 import os
+os.path.chdir("/usr/local/AsteriskPyHou")
+
 import sys
+
 sys.path.append("../lib")
 
 from gevent import pywsgi
