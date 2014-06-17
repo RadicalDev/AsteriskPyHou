@@ -145,4 +145,5 @@ if __name__ == "__main__":
     except Exception, e:
         log(LOG_INFO, "webserver: Shutting down!")
         if os.path.exists("../etc/users.db"):
+            log(LOG_INFO, "webserver: Deleting database")
             os.remove("../etc/users.db")
