@@ -24,9 +24,6 @@ except:
 
 
 def genURL(apikey, duration, reference, fmt, callback):
-    #url = "https://mycaption-prod.apigee.net/v1/asr?apikey={0}&audio_duration={1}&reference={2}&audio_format={3}&callback={4}"
-    #url = "http://192.168.1.40/v1/asr?apikey={0}&audio_duration={1}&reference={2}&audio_format={3}&callback={4}"
-    #url = MYCAPTION_TEST
     url = MYCAPTION_ASR_API
     url = url.format(apikey, duration, reference, fmt, callback)
     return url
@@ -98,4 +95,3 @@ def requestCaption(session, uuid, path):
             "{0}: mycaption.requestCaption: Transmission failed.".format(
                 session))
     return False
-

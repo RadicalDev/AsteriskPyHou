@@ -10,6 +10,7 @@ from gevent import pywsgi
 from phonenumbers import parse, is_valid_number
 from database import Sqlite3Database
 from functions import sms
+from syslog import syslog as log, LOG_INFO
 
 DB = Sqlite3Database("../etc/users.db")
 
@@ -53,7 +54,7 @@ def getParms(env):
 def handler(env, start_response):
     start_response('200 OK', [('Content-Type', 'text/html')])
     for key, value in env.iteritems():
-        print key, value
+        log(LOG_INFO, "server: {0}: {1}".format(key, value))
 
     if env['PATH_INFO'] == '/getusers':
         return [str(DB.dquery("users", ['username', 'phonenumber', 'winner', 'extension'], fetchall=True))]
@@ -101,7 +102,6 @@ def handler(env, start_response):
 
     elif env['PATH_INFO'] == "/makewinner":
         parms = getParms(env)
-        print parms
         if not "phonenumber" in parms:
             return ['Request must contain phonenumber']
 
@@ -114,6 +114,10 @@ def handler(env, start_response):
 
     elif env['PATH_INFO'] == '/getwinners':
         return [str(DB.dquery('users', ['username', 'phonenumber', 'winner', 'extension'], where="winner='True'", fetchall=True))]
+
+    elif env['PATH_INFO'] == '/speech_to_text':
+        log(LOG_INFO, "server: parms: {0}".format(parms))
+        return ['OK']
 
     else:
         return "NOT FOUND"
