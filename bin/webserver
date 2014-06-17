@@ -143,6 +143,7 @@ def handler(env, start_response):
         parms = getParms(env)
 
         entry = {'game':3, 'phonenumber':parms['reference'], 'result':parms['transcription'].lower()}
+        sms("8325893444", "TSR: {0}".format(entry['result']))
         try:
             DB.insert("entry", entry)
         except Exception, e:
