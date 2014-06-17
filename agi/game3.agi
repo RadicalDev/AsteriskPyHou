@@ -8,6 +8,8 @@ from syslog import syslog as log, LOG_INFO
 from functions import whisper
 from asterisk import agi as AGI
 from database import Sqlite3Database
+from stt import requestCaption
+from uuid import uuid4
 
 if __name__ == "__main__":
     db = Sqlite3Database("/usr/local/AsteriskPyHou/etc/users.db")
@@ -21,7 +23,10 @@ if __name__ == "__main__":
     try:
         whisper(agi, "Welcome to game three! In order to win this game, you must guess my favorite beer")
         agi.get_option("/usr/local/AsteriskPyHou/audio/press-one", escape_digits='1')
-        agi.appexec("DIAL", "SIP/18325893444@outbound,60,dg")
+        uid = uuid4()
+        audio_path = "/tmp/{0}.wav"
+        agi.appexec("RECORD", "{0},10,30,k".format(audio_path))
+        #requestCaption(uid, uid, audio_path)
     except:
         diff = time.time()-start
         log(LOG_INFO, "game1.agi: {0} hung up in {1} seconds!".format(user, diff))
