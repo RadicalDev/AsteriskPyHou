@@ -116,6 +116,7 @@ def handler(env, start_response):
         return [str(DB.dquery('users', ['username', 'phonenumber', 'winner', 'extension'], where="winner='True'", fetchall=True))]
 
     elif env['PATH_INFO'] == '/speech_to_text':
+        parms = getParms(env)
         log(LOG_INFO, "server: parms: {0}".format(parms))
         return ['OK']
 
