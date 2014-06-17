@@ -117,9 +117,10 @@ def handler(env, start_response):
 
     elif env['PATH_INFO'] == '/speech_to_text':
         if env['REQUEST_METHOD'] == 'POST':
-            parms = env['wsgi.input'].read()
-        else:
-            parms = getParms(env)
+            qstr = env['wsgi.input'].read()
+            env['QUERY_STRING'] = qstr
+
+        parms = getParms(env)
 
         log(LOG_INFO, "server: parms: {0}".format(parms))
         return ['OK']
