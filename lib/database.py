@@ -109,6 +109,8 @@ class Sqlite3Database(object):
                       "secret VARCHAR"
                       ")"
 
+                      "\n"
+
                       "CREATE TABLE entry("
                       "rowID INTEGER PRIMARY KEY AUTOINCREMENT, "
                       "game INTEGER, "
