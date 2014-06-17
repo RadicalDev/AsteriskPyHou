@@ -74,7 +74,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     if args.list_players:
-        for i in DB.dquery("users", ["name", "phonenumber", "extension"], fetchall=True, order_by="name"):
+        for i in DB.dquery("users", ["username", "phonenumber", "extension"], fetchall=True, order_by="username"):
             print "Name: {0}, Phone: {1}, Ext: {2}".format(i['name'], i['phonenumber'], i['extension'])
         sys.exit(0)
 
