@@ -105,7 +105,7 @@ class Sqlite3Database(object):
                       "username VARCHAR, "
                       "phonenumber VARCHAR UNIQUE, "
                       "winner VARCHAR DEFAULT 'False', "
-                      "extension VARCHAR UNIQUE, "
+                      "extension VARCHAR, "
                       "secret VARCHAR"
                       ")"
             )
