@@ -1,0 +1,43 @@
+*.pyc
+
+*.py[cod]
+*~
+.DS_Store
+
+# project files
+*sublime*
+.mr.developer.cfg
+.project
+.pydevproject
+.idea
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+var
+sdist
+develop-eggs
+.installed.cfg
+lib64
+*.pyc
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# extras
+*.db
