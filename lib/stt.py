@@ -1,8 +1,9 @@
 import requests, os, math, json
 from syslog import syslog as log, LOG_INFO
 
-MYCAPTION_ASR_API="https://mycaption-prod.apigee.net/v1/asr?apikey={0}&audio_duration={1}&reference={2}&audio_format={3}&callback={4}"
-MYCAPTION_PREMIUM_API="https://mycaption-prod.apigee.net/v1/audio?apikey={0}&audio_duration={1}&reference={2}&audio_format={3}&callback={4}"
+urls = [x.strip() for x in open("/etc/mycaption_urls", 'r').readlines() if x]
+MYCAPTION_ASR_API=urls[0]
+MYCAPTION_PREMIUM_API=urls[1]
 CALLBACK='http://54.186.252.119/speech_to_text?response=True'
 KEY=open("/etc/mc", 'r').read().strip()
 
@@ -23,8 +24,7 @@ except:
         return 11
 
 
-def genURL(apikey, duration, reference, fmt, callback):
-    url = MYCAPTION_PREMIUM_API
+def genURL(apikey, duration, reference, fmt, callback, url=MYCAPTION_ASR_API):
     url = url.format(apikey, duration, reference, fmt, callback)
     return url
 
@@ -34,7 +34,7 @@ def getFormat(path):
     return fmt.lstrip(".")
 
 
-def requestCaption(session, uuid, path):
+def requestCaption(session, uuid, path, method="ASR"):
     reference = uuid
     callback = CALLBACK
     apikey = KEY
@@ -53,7 +53,12 @@ def requestCaption(session, uuid, path):
     log(LOG_INFO,
         "{0}: mycaption.requestCaption: File format: {1}".format(session, fmt))
 
-    url = genURL(apikey, duration, reference, fmt, callback)
+    if method == 'ASR':
+        api = MYCAPTION_ASR_API
+    else:
+        api = MYCAPTION_PREMIUM_API
+
+    url = genURL(apikey, duration, reference, fmt, callback, url=api)
     if not url:
         raise Exception("Unable to generate URL")
 

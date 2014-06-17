@@ -36,6 +36,7 @@ def game3():
     main_line = '2818097414'
     users = DB.dquery("users", fetchall=True)
 
+
     ami = AMI()
     for user in users:
         ami.create_call(user['phonenumber'], main_line,
@@ -63,7 +64,7 @@ if __name__ == "__main__":
     parser.add_argument("-g", "--game", type=int, help="-g <game number>", choices=[1,2,3])
     parser.add_argument("-p", "--play", action="store_true", help="Play the game, don't report on it")
     parser.add_argument("-r", "--results", action="store_true", help="Show results of the game")
-    parser.add_argument("-c", "--condition", type=str, help="Set condition for winning", choices=["first", "last", "equality", 'fastest', 'slowest'], default='first')
+    parser.add_argument("-c", "--condition", type=str, help="Set condition for winning", choices=["first", "last", "in", "equality", 'fastest', 'slowest'], default='first')
     parser.add_argument("-v", "--value", type=str, help="Condition to set for equality")
     parser.add_argument("-n", "--notify-winner", action="store_true", help="Notify the winner")
     parser.add_argument("-l", "--list-players", action="store_true", help="List all registered players")
