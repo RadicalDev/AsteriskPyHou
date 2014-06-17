@@ -69,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument("-l", "--list-players", action="store_true", help="List all registered players")
     args = parser.parse_args()
 
-    if not args.game:
+    if not args.game and not args.list_players:
         parser.print_usage()
         sys.exit(1)
 
