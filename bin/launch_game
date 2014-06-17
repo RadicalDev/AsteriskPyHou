@@ -8,6 +8,7 @@ from ami import AMI
 from functions import sms
 from database import Sqlite3Database
 
+
 def game1():
     main_line = '8322611494'
     db = Sqlite3Database("../etc/users.db")
