@@ -10,7 +10,7 @@ from database import Sqlite3Database
 import argparse
 
 DB = Sqlite3Database("../etc/users.db")
-
+GAME_RESULTS=None
 
 def game1():
     main_line = '8322611494'
@@ -47,11 +47,23 @@ games = {'1':game1,
          '3':game3,
 }
 
+def get_results(game, order_by):
+    global GAME_RESULTS
+    if not GAME_RESULTS:
+        GAME_RESULTS = DB.dquery("entry", where="game={0}".format(game), fetchall=True, order_by=order_by)
+        return GAME_RESULTS
+
+
+def notify(i, what):
+    print "Notifying {0}: {1} -> {2}".format(i['phonenumber'], i['game'], i['result'])
+    #sms(i['phonenumber'], what)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-g", "--game", type=int, help="-g <game number>", choices=[1,2,3])
     parser.add_argument("-r", "--results", action="store_true", help="Show results of the game")
+    parser.add_argument("-c", "--condition", type=str, help="Set condition for winning", choices=["first", "last", "equality"], default='first')
+    parser.add_argument("-v", "--value", type=str, help="Condition to set for equality")
     parser.add_argument("-n", "--notify-winner", action="store_true", help="Notify the winner")
     args = parser.parse_args()
 
@@ -59,19 +71,27 @@ if __name__ == "__main__":
         parser.print_usage()
         sys.exit(1)
 
-    game_results = None
+    if args.condition == 'first':
+        order_by = "result ASC"
+    elif args.condition == 'last':
+        order_by = "result DESC"
+    else:
+        order_by = None
+
     if args.results:
-        game_results = DB.dquery("entry", where="game={0}".format(args.game), fetchall=True, order_by="result ASC")
+        game_results = get_results(args.game, order_by)
         for i in game_results:
             print "{0}: {1} -> {2}".format(i['phonenumber'], i['game'], i['result'])
 
     if args.notify_winner:
-        if not game_results:
-            game_results = DB.dquery("entry", where="game={0}".format(args.game), fetchall=True, order_by="result ASC")
-
+        game_results = get_results(args.game, order_by)
         for i in game_results:
-            print "Notifying {0}: {1} -> {2}".format(i['phonenumber'], i['game'], i['result'])
-            break
+            if args.condition == 'equality':
+                if i['result'].lower().strip() == args.value.lower().strip():
+                    notify(i, "You win! The right answer was {0}".format(args.value))
+            else:
+                notify(i, "You win! You were the {0} to complete the objective".format(args.condition))
+                break
 
 
 
