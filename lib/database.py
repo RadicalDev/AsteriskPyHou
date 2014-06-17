@@ -124,6 +124,7 @@ class Sqlite3Database(object):
 
             try:
                 for stmt in create:
+                    log(LOG_INFO, "{0}: database.Sqlite3Database: Executing statement: {1}".format(self.session, stmt))
                     cur.execute(stmt)
                 db.commit()
             except Exception, e:
