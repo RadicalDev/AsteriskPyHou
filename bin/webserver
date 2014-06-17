@@ -4,6 +4,7 @@ __author__ = 'jfindley'
 
 import os
 import sys
+import json
 
 sys.path.append("/usr/local/AsteriskPyHou/lib")
 
@@ -77,7 +78,7 @@ def handler(env, start_response):
         log(LOG_INFO, "server: {0}: {1}".format(key, value))
 
     if env['PATH_INFO'] == '/getusers':
-        return [str(DB.dquery("users", ['username', 'phonenumber', 'winner', 'extension'], fetchall=True))]
+        return [json.dumps(DB.dquery("users", ['username', 'phonenumber', 'winner', 'extension'], fetchall=True))]
 
     elif env['PATH_INFO'] == '/register':
         parms = getParms(env)
@@ -133,7 +134,7 @@ def handler(env, start_response):
         return ['OK']
 
     elif env['PATH_INFO'] == '/getwinners':
-        return [str(DB.dquery('users', ['username', 'phonenumber', 'winner', 'extension'], where="winner='True'", fetchall=True))]
+        return [json.dumps(DB.dquery('users', ['username', 'phonenumber', 'winner', 'extension'], where="winner='True'", fetchall=True))]
 
     elif env['PATH_INFO'] == '/speech_to_text':
         if env['REQUEST_METHOD'] == 'POST':
