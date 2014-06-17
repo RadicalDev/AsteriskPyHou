@@ -43,7 +43,7 @@ def game3():
                         main_line, 'game-three', user['phonenumber'])
 
 
-games = {1:game1, 2:game2, 3:game3}
+games = {'1':game1, '2':game2, '3':game3}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
