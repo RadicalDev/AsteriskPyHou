@@ -32,4 +32,4 @@ if __name__ == "__main__":
             log(LOG_INFO, "game3.agi: {0} hung up!".format(user))
         log(LOG_INFO, "game3.agi: Sent request for {0}".format(user))
     except Exception, e:
-        log(LOG_INFO, "WTF: {0}".format(e))
+        log(LOG_INFO, "game3.agi: Oops!: {0}".format(e))

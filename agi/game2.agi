@@ -20,13 +20,13 @@ if __name__ == "__main__":
 
         if not your_code:
             log(LOG_INFO, "game2.agi: {0} did not enter anything =(".format(your_code))
-            return
+            sys.exit(0)
 
         your_code = int(your_code)
 
         if your_code != my_code:
             log(LOG_INFO, "game2.agi: {0} entered the wrong code!".format(user))
-            return
+            sys.exit(0)
 
         end = time.time()
         log(LOG_INFO, "game2.agi: {0} entered the code {1}".format(user, your_code))
@@ -37,4 +37,4 @@ if __name__ == "__main__":
         except Exception, e:
             log(LOG_INFO, "game2.agi: {0}'s entry was omitted because: {1}".format(user, e))
     except Exception, e:
-        log(LOG_INFO, "WTF: {0}".format(e))
+        log(LOG_INFO, "game2.agi: Oops!: {0}".format(e))

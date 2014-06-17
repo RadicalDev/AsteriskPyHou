@@ -9,13 +9,16 @@ def numberOK(number):
     return False
 
 if __name__ == "__main__":
-    agi = AGI.AGI()
-    for key, value in agi.env.iteritems():
-        log(LOG_INFO, "default.agi: {0}: {1}".format(key, value))
+    try:
+        agi = AGI.AGI()
+        for key, value in agi.env.iteritems():
+            log(LOG_INFO, "default.agi: {0}: {1}".format(key, value))
 
-    dest = agi.env['agi_extension']
-    if numberOK(dest):
-        tech = "SIP/1{0}@outbound".format(dest)
-        agi.appexec("DIAL", tech)
-    else:
-        agi.appexec("DIAL", "SIP/{0}".format(dest))
+        dest = agi.env['agi_extension']
+        if numberOK(dest):
+            tech = "SIP/1{0}@outbound".format(dest)
+            agi.appexec("DIAL", tech)
+        else:
+            agi.appexec("DIAL", "SIP/{0}".format(dest))
+    except Exception, e:
+        log(LOG_INFO, "default.agi: Oops!: {0}".format(e))
