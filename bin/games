@@ -66,11 +66,17 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--condition", type=str, help="Set condition for winning", choices=["first", "last", "equality", 'fastest', 'slowest'], default='first')
     parser.add_argument("-v", "--value", type=str, help="Condition to set for equality")
     parser.add_argument("-n", "--notify-winner", action="store_true", help="Notify the winner")
+    parser.add_argument("-l", "--list-players", action="store_true", help="List all registered players")
     args = parser.parse_args()
 
     if not args.game:
         parser.print_usage()
         sys.exit(1)
+
+    if args.list_players:
+        for i in DB.dquery("users", ["name", "phonenumber", "extension"], fetchall=True, order_by="name"):
+            print "Name: {0}, Phone: {1}, Ext: {2}".format(i['name'], i['phonenumber'], i['extension'])
+        sys.exit(0)
 
     if args.game and args.play:
         print "Launching game {0}".format(args.game)
