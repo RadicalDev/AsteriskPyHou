@@ -43,5 +43,15 @@ def game3():
                         main_line, 'game-three', user['phonenumber'])
 
 
+games = {1:game1, 2:game2, 3:game3}
+
 if __name__ == "__main__":
-    print sys.argv
+    if len(sys.argv) < 2:
+        print "launch_game <game_number>"
+        sys.exit(1)
+
+    game_number = sys.argv[1]
+    if game_number in games:
+        games[game_number]()
+        print "Started game number ", game_number
+
