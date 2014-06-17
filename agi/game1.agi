@@ -15,21 +15,24 @@ if __name__ == "__main__":
         agi = AGI.AGI()
         user = agi.env['agi_accountcode']
 
-        for key, value in agi.env.iteritems():
-            log(LOG_INFO, "game1.agi: {0}: {1}".format(key, value))
-
         start = time.time()
+
         try:
             whisper(agi, "Welcome to game one! In order to win this game, you must be the fastest to hang up")
             agi.appexec("WAIT", "600")
         except:
-            diff = time.time()-start
-            log(LOG_INFO, "game1.agi: {0} hung up in {1} seconds!".format(user, diff))
+            pass
+
+        diff = time.time()-start
+        log(LOG_INFO, "game1.agi: {0} hung up in {1} seconds!".format(user, diff))
 
         entry = {'game':1, 'phonenumber':user, 'result':diff}
         try:
             db.insert("entry", entry)
+            whisper(agi, "Thanks. We'll let you know")
         except Exception, e:
             log(LOG_INFO, "game1.agi: {0}'s entry was omitted because: {1}".format(user, e))
+            whisper(agi, "You only get one shot at free beer.")
+
     except Exception, e:
         log(LOG_INFO, "game1.agi: Oops!: {0}".format(e))

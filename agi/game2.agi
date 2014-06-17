@@ -40,5 +40,6 @@ if __name__ == "__main__":
         except Exception, e:
             log(LOG_INFO, "game2.agi: {0}'s entry was omitted because: {1}".format(user, e))
             whisper(agi, "You only get one shot at free beer.")
+
     except Exception, e:
         log(LOG_INFO, "game2.agi: Oops!: {0}".format(e))

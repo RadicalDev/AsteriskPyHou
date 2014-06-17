@@ -17,17 +17,15 @@ if __name__ == "__main__":
         agi = AGI.AGI()
         user = agi.env['agi_accountcode']
 
-        for key, value in agi.env.iteritems():
-            log(LOG_INFO, "game3.agi: {0}: {1}".format(key, value))
-
         start = time.time()
         try:
-            whisper(agi, "Welcome to game three! In order to win this game, you must guess my favorite beer")
+            whisper(agi, "Welcome to game three! In order to win this game, you must tell someone in india what it is, and whoever you tell must be able to spell it right. Do that after the beep")
             agi.get_option("/usr/local/AsteriskPyHou/audio/press-one", escape_digits='1')
             uid = uuid4()
             audio_path = "/tmp/{0}.wav".format(uid)
             agi.appexec("RECORD", "{0},10,30,k".format(audio_path))
             requestCaption(uid, user, audio_path)
+            whisper(agi, "Ok, your words have been sent to india. Good luck!")
         except:
             log(LOG_INFO, "game3.agi: {0} hung up!".format(user))
         log(LOG_INFO, "game3.agi: Sent request for {0}".format(user))
