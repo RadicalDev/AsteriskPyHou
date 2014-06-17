@@ -7,8 +7,10 @@ from database import Sqlite3Database
 from ami import AMI
 from functions import sms
 from database import Sqlite3Database
+import argparse
 
 DB = Sqlite3Database("../etc/users.db")
+
 
 def game1():
     main_line = '8322611494'
@@ -17,12 +19,6 @@ def game1():
     ami = AMI()
     for user in users:
         ami.create_call(user['phonenumber'], main_line, main_line, 'game-one', user['phonenumber'])
-
-
-def game1_result(winner=False):
-    for entry in DB.dquery("entry", where="game=1", fetchall=not winner, order_by="result ASC"):
-        print entry
-
 
 
 def game2():
@@ -36,11 +32,6 @@ def game2():
         sms(user['phonenumber'], msg)
 
 
-def game2_result(winner=False):
-    for entry in DB.dquery("entry", where="game=2", fetchall=not winner, order_by="result ASC"):
-        print entry
-
-
 def game3():
     main_line = '2818097414'
     users = DB.dquery("users", fetchall=True)
@@ -51,38 +42,39 @@ def game3():
                         main_line, 'game-three', user['phonenumber'])
 
 
-def game3_result(winner=False):
-    for entry in DB.dquery("entry", where="game=1", fetchall=not winner, order_by="result ASC"):
-        print entry
-
-games = {'1':(game1, game1_result),
-         '2':(game2, game2_result),
-         '3':(game3, game3_result)
+games = {'1':game1,
+         '2':game2,
+         '3':game3,
 }
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print "games <game_number>"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-g", "--game", type=int, help="-g <game number>", choices=[1,2,3])
+    parser.add_argument("-r", "--results", action="store_true", help="Show results of the game")
+    parser.add_argument("-n", "--notify-winner", action="store_true", help="Notify the winner")
+    args = parser.parse_args()
+
+    if not args.game:
+        parser.print_usage()
         sys.exit(1)
 
-    get_result = False
-    get_winner = False
+    game_results = None
+    if args.results:
+        game_results = DB.dquery("entry", where="game={0}".format(args.game), fetchall=True, order_by="result ASC")
+        for i in game_results:
+            print "{0}: {1} -> {2}".format(i['phonenumber'], i['game'], i['result'])
 
-    game_number = sys.argv[1]
-    if len(sys.argv) > 2:
-        if sys.argv[2] == 'results':
-            get_result = True
-        elif sys.argv[2] == 'winner':
-            get_winner = True
+    if args.results:
+        if not game_results:
+            game_results = DB.dquery("entry", where="game={0}".format(args.game), fetchall=True, order_by="result ASC")
 
-    if game_number in games:
-        if not get_result and not get_winner:
-            games[game_number][0]()
-            print "Started game number ", game_number
-        elif get_result:
-            games[game_number][1]()
-        elif get_winner:
-            games[game_number][1](winner=True)
+        for i in game_results:
+            print "Notifying {0}: {1} -> {2}".format(i['phonenumber'], i['game'], i['result'])
+            break
+
+
+
+
 
 

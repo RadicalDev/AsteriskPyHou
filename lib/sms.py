@@ -30,7 +30,8 @@ class SMS(object):
                  "msg": msg,
                  "xml": "yes"}
         c, msg = self.call(self.sms_out_base, parms)
-        if "ok" in msg.lower(): return True
+        if "ok" in msg.lower():
+            return True
         return False
 
     def send(self, src, dst, msg):
