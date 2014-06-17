@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
         if your_code != my_code:
             log(LOG_INFO, "game2.agi: {0} entered the wrong code!".format(user))
-            whisper("Oh no, you entered the wrong code! How could you do that??")
+            whisper(agi, "Oh no, you entered the wrong code! How could you do that??")
             sys.exit(0)
 
         end = time.time()
@@ -36,9 +36,9 @@ if __name__ == "__main__":
         entry = {'game':2, 'phonenumber':user, 'result':end}
         try:
             db.insert("entry", entry)
-            whisper("Great, don't call us, we'll call you")
+            whisper(agi, "Great, don't call us, we'll call you")
         except Exception, e:
             log(LOG_INFO, "game2.agi: {0}'s entry was omitted because: {1}".format(user, e))
-            whisper("You only get one shot at free beer.")
+            whisper(agi, "You only get one shot at free beer.")
     except Exception, e:
         log(LOG_INFO, "game2.agi: Oops!: {0}".format(e))
