@@ -12,6 +12,19 @@ from database import Sqlite3Database
 from functions import sms
 from syslog import syslog as log, LOG_INFO
 
+
+
+#Cleanup SIP entries
+with open("../etc/asterisk/default_sip.conf", 'r') as f:
+    default = f.read()
+    f.close()
+    with open("/etc/asterisk/sip.conf", 'w') as k:
+        k.write(default)
+        k.close()
+os.system('/usr/sbin/asterisk -rx "sip reload"')
+
+
+#Cleanup DB
 if os.path.exists("../etc/users.db"):
     os.remove("../etc/users.db")
 
