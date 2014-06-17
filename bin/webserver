@@ -22,7 +22,9 @@ def numberOK(number):
 
 
 def generatePeer(parms):
-    template = """[{0}]
+    template = """
+
+[{0}]
 type=peer
 host=dynamic
 secret={1}
@@ -36,6 +38,7 @@ dtmfmode=rfc2833
 insecure=invite,port
 sendrpid=yes
 callerid={0}
+
 
 """
     return template.format(parms['extension'], parms['secret'])
