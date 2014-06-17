@@ -3,6 +3,7 @@ import time
 import sys
 sys.path.append("/usr/local/AsteriskPyHou/lib")
 
+
 from asterisk import agi as AGI
 from functions import whisper
 from syslog import syslog as log, LOG_INFO
