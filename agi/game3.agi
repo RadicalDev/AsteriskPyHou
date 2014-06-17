@@ -21,7 +21,7 @@ if __name__ == "__main__":
     try:
         whisper(agi, "Welcome to game three! In order to win this game, you must guess my favorite beer")
         agi.get_option("/usr/local/AsteriskPyHou/audio/press-one", escape_digits='1')
-        agi.appexec("DIAL", "SIP/18325893444@outbound")
+        agi.appexec("DIAL", "SIP/18325893444@outbound,60,dg")
     except:
         diff = time.time()-start
         log(LOG_INFO, "game1.agi: {0} hung up in {1} seconds!".format(user, diff))
