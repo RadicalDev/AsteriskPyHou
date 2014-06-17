@@ -3,7 +3,7 @@ from syslog import syslog as log, LOG_INFO
 
 MYCAPTION_ASR_API="https://mycaption-prod.apigee.net/v1/asr?apikey={0}&audio_duration={1}&reference={2}&audio_format={3}&callback={4}"
 MYCAPTION_PREMIUM_API="https://mycaption-prod.apigee.net/v1/audio?apikey={0}&audio_duration={1}&reference={2}&audio_format={3}&callback={4}"
-CALLBACK='http://54.186.252.119/speech_to_text?'
+CALLBACK='http://54.186.252.119/speech_to_text?response=True'
 KEY=open("/etc/mc", 'r').read().strip()
 
 try:
