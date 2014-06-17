@@ -42,9 +42,9 @@ def game3():
                         main_line, 'game-three', user['phonenumber'])
 
 
-games = {'1':game1,
-         '2':game2,
-         '3':game3,
+games = {1:game1,
+         2:game2,
+         3:game3,
 }
 
 def get_results(game, order_by):
