@@ -65,7 +65,7 @@ if __name__ == "__main__":
         for i in game_results:
             print "{0}: {1} -> {2}".format(i['phonenumber'], i['game'], i['result'])
 
-    if args.results:
+    if args.notify_winner:
         if not game_results:
             game_results = DB.dquery("entry", where="game={0}".format(args.game), fetchall=True, order_by="result ASC")
 
