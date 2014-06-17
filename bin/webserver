@@ -78,7 +78,7 @@ def handler(env, start_response):
         log(LOG_INFO, "server: {0}: {1}".format(key, value))
 
     if env['PATH_INFO'] == '/getusers':
-        return [json.dumps(DB.dquery("users", ['username', 'phonenumber', 'winner', 'extension'], fetchall=True))]
+        return [json.dumps(DB.dquery("users", ['username', 'phonenumber', 'extension'], fetchall=True))]
 
     elif env['PATH_INFO'] == '/register':
         parms = getParms(env)
@@ -121,20 +121,9 @@ def handler(env, start_response):
         DB.delete("users", where="phonenumber='{0}'".format(parms['phonenumber']))
         return ["OK"]
 
-    elif env['PATH_INFO'] == "/makewinner":
-        parms = getParms(env)
-        if not "phonenumber" in parms:
-            return ['Request must contain phonenumber']
-
-        DB.update("users", "winner", "True", where="phonenumber='{0}'".format(parms['phonenumber']))
-        return ['OK']
-
     elif env['PATH_INFO'] == '/reset':
         DB.update("users", "winner", "False")
         return ['OK']
-
-    elif env['PATH_INFO'] == '/getwinners':
-        return [json.dumps(DB.dquery('users', ['username', 'phonenumber', 'winner', 'extension'], where="winner='True'", fetchall=True))]
 
     elif env['PATH_INFO'] == '/speech_to_text':
         if env['REQUEST_METHOD'] == 'POST':

@@ -108,7 +108,6 @@ class Sqlite3Database(object):
                       "rowID INTEGER PRIMARY KEY AUTOINCREMENT, "
                       "username VARCHAR, "
                       "phonenumber VARCHAR UNIQUE, "
-                      "winner VARCHAR DEFAULT 'False', "
                       "extension VARCHAR, "
                       "secret VARCHAR"
                       ")"
