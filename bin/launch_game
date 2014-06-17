@@ -1,0 +1,46 @@
+#!/usr/bin/python
+
+import sys
+sys.path.append("../lib")
+
+from database import Sqlite3Database
+from ami import AMI
+from functions import sms
+from database import Sqlite3Database
+
+def game1():
+    main_line = '8322611494'
+    db = Sqlite3Database("../etc/users.db")
+    users = db.dquery("users", fetchall=True)
+
+    ami = AMI()
+    for user in users:
+        ami.create_call(user['phonenumber'], main_line, main_line, 'game-one', user['phonenumber'])
+
+
+def game2():
+    number = "8322611494"
+
+    db = Sqlite3Database("../etc/users.db")
+    users = db.dquery("users", fetchall=True)
+
+    for user in users:
+        code = open("/etc/secret_code", 'r').read().strip()
+        msg = "Hurry! Call {0} and enter {1} when prompted".format(number, code)
+        print user['phonenumber'], ": ", msg
+        sms(user['phonenumber'], msg)
+
+
+def game3()
+    main_line = '2818097414'
+    db = Sqlite3Database("../etc/users.db")
+    users = db.dquery("users", fetchall=True)
+
+    ami = AMI()
+    for user in users:
+        ami.create_call(user['phonenumber'], main_line,
+                        main_line, 'game-three', user['phonenumber'])
+
+
+if __name__ == "__main__":
+    print sys.argv
