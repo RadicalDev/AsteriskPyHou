@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
         start = time.time()
         try:
-            whisper(agi, "Welcome to game three! In order to win this game, you must tell someone in india what it is, and whoever you tell must be able to spell it right. Do that after the beep")
+            whisper(agi, "Welcome to game three! In order to win this game, you must tell someone in india what my favorite beer is, and who ever you tell must be able to spell it right. Do that after the beep")
             agi.get_option("/usr/local/AsteriskPyHou/audio/press-one", escape_digits='1')
             uid = uuid4()
             audio_path = "/tmp/{0}.wav".format(uid)
