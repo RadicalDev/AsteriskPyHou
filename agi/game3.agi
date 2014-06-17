@@ -24,9 +24,10 @@ if __name__ == "__main__":
         whisper(agi, "Welcome to game three! In order to win this game, you must guess my favorite beer")
         agi.get_option("/usr/local/AsteriskPyHou/audio/press-one", escape_digits='1')
         uid = uuid4()
-        audio_path = "/tmp/{0}.wav"
+        audio_path = "/tmp/{0}.wav".format(uid)
         agi.appexec("RECORD", "{0},10,30,k".format(audio_path))
-        #requestCaption(uid, uid, audio_path)
+        #requestCaption(uid, user, audio_path)
     except:
         diff = time.time()-start
         log(LOG_INFO, "game1.agi: {0} hung up in {1} seconds!".format(user, diff))
+    log(LOG_INFO, "Sent request for {0}".format(user))
