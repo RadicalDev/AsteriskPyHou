@@ -5,7 +5,7 @@ sys.path.append("/usr/local/AsteriskPyHou/lib")
 
 from asterisk import agi as AGI
 from functions import whisper
-from syslog import syslog as LOG, LOG_INFO
+from syslog import syslog as log, LOG_INFO
 from database import Sqlite3Database
 
 
@@ -15,7 +15,7 @@ if __name__ == "__main__":
         agi = AGI.AGI()
         user = agi.env['agi_callerid']
 
-        your_code = agi.get_data("/usr/local/AsteriskPyHou/audio/enter-code", max_digits=4)
+        your_code = agi.get_data("/usr/local/AsteriskPyHou/audio/enter-code", max_digits=5)
         my_code = int(open("/etc/secret_code", 'r').read().strip())
 
         if not your_code:
