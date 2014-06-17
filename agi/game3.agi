@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
         start = time.time()
         try:
-            whisper(agi, "Welcome to game three! In order to win this game, you must tell someone in in dee uh what my favorite beer is, and who ever you tell must be able to spell it right. Do that after the beep")
+            whisper(agi, "Welcome to game three! In order to win this game, you must tell someone in INDIA what my favorite beer is, and who ever you tell must be able to spell it right. Do that after the beep")
             uid = uuid4()
             audio_path = "/tmp/{0}.wav".format(uid)
             agi.appexec("RECORD", "{0},10,30,k".format(audio_path))
